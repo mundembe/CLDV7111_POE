@@ -33,7 +33,7 @@ namespace EventEase.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EventId")
+                    b.Property<int>("EventModelId")
                         .HasColumnType("int");
 
                     b.Property<int>("VenueId")
@@ -41,7 +41,7 @@ namespace EventEase.Migrations
 
                     b.HasKey("BookingId");
 
-                    b.HasIndex("EventId")
+                    b.HasIndex("EventModelId")
                         .IsUnique();
 
                     b.HasIndex("VenueId");
@@ -49,13 +49,13 @@ namespace EventEase.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("EventEase.Models.Event", b =>
+            modelBuilder.Entity("EventEase.Models.EventModel", b =>
                 {
-                    b.Property<int>("EventId")
+                    b.Property<int>("EventModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventModelId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -71,7 +71,7 @@ namespace EventEase.Migrations
                     b.Property<int?>("VenueId")
                         .HasColumnType("int");
 
-                    b.HasKey("EventId");
+                    b.HasKey("EventModelId");
 
                     b.HasIndex("VenueId");
 
@@ -108,9 +108,9 @@ namespace EventEase.Migrations
 
             modelBuilder.Entity("EventEase.Models.Booking", b =>
                 {
-                    b.HasOne("EventEase.Models.Event", "Event")
+                    b.HasOne("EventEase.Models.EventModel", "Event")
                         .WithOne("Booking")
-                        .HasForeignKey("EventEase.Models.Booking", "EventId")
+                        .HasForeignKey("EventEase.Models.Booking", "EventModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -125,7 +125,7 @@ namespace EventEase.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("EventEase.Models.Event", b =>
+            modelBuilder.Entity("EventEase.Models.EventModel", b =>
                 {
                     b.HasOne("EventEase.Models.Venue", "Venue")
                         .WithMany()
@@ -134,10 +134,9 @@ namespace EventEase.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("EventEase.Models.Event", b =>
+            modelBuilder.Entity("EventEase.Models.EventModel", b =>
                 {
-                    b.Navigation("Booking")
-                        .IsRequired();
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("EventEase.Models.Venue", b =>

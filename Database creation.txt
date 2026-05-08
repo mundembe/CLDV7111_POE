@@ -1,0 +1,40 @@
+CREATE TABLE Venue (
+    VenueId INT PRIMARY KEY IDENTITY(1,1),
+    VenueName NVARCHAR(100) NOT NULL,
+    Location NVARCHAR(150) NOT NULL,
+    Capacity INT NOT NULL,
+    ImageUrl NVARCHAR(255)
+);
+
+CREATE TABLE Event (
+    EventId INT PRIMARY KEY IDENTITY(1,1),
+    EventName NVARCHAR(100) NOT NULL,
+    EventDate DATETIME NOT NULL,
+    Description NVARCHAR(255),
+    VenueId INT NULL,
+    CONSTRAINT FK_Event_Venue FOREIGN KEY (VenueId)
+        REFERENCES Venue(VenueId)
+        ON DELETE SET NULL
+);
+
+CREATE TABLE Booking (
+    BookingId INT PRIMARY KEY IDENTITY(1,1),
+    EventId INT NOT NULL,
+    VenueId INT NOT NULL,
+    BookingDate DATETIME NOT NULL,
+
+    CONSTRAINT FK_Booking_Event FOREIGN KEY (EventId)
+        REFERENCES Event(EventId)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_Booking_Venue FOREIGN KEY (VenueId)
+        REFERENCES Venue(VenueId)
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE Booking
+ADD CONSTRAINT UQ_Event UNIQUE (EventId);
+
+CREATE UNIQUE INDEX IX_Venue_BookingDate
+ON Booking (VenueId, BookingDate);
+
